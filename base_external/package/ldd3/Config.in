@@ -1,0 +1,6 @@
+
+config BR2_PACKAGE_LDD3
+	bool "ldd3"
+	help
+	  Includes the misc-modules and scull components on qemu target.
+	  Used to understand how to build these subdirectories with the MODULE_SUBDIRS option.
