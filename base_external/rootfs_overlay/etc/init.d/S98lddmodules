@@ -4,13 +4,15 @@ case "$1" in
     start)
         echo "Loading the driver..."
         scull_load
+        aesdchar_load
         module_load faulty
         modprobe hello
         echo "Loaded the driver successfully"
         ;;
     stop)
-        echo "Unloading the driver scull, faulty and hello"
+        echo "Unloading the driver scull, faulty, aesdchar and hello"
         scull_unload
+        aesdchar_unload
         module_unload faulty
         rmmod hello || exit 1
         echo "Unload the faulty successfully"

@@ -6,13 +6,14 @@
 ##############################################################
 
 # Fill up the contents below in order to reference your assignment 3 git contents
-AESD_ASSIGNMENTS_VERSION = 'bbe97d9721f7f9bd2e32310d85bfafd91d08aea4'
+AESD_ASSIGNMENTS_VERSION = 'b396330655b26e26e42a7ca99e1cf2d751ae02c1'
 # Note: Be sure to reference the *ssh* repository URL here (not https) to work properly
 # with ssh keys and the automated build/test system.
 # Your site should start with git@github.com:
 AESD_ASSIGNMENTS_SITE = 'git@github.com:cu-ecen-aeld/assignments-3-and-later-DeeDee2804.git'
 AESD_ASSIGNMENTS_SITE_METHOD = git
 AESD_ASSIGNMENTS_GIT_SUBMODULES = YES
+AESD_ASSIGNMENTS_MODULE_SUBDIRS = aesd-char-driver
 
 define AESD_ASSIGNMENTS_BUILD_CMDS
 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/finder-app all
@@ -29,6 +30,12 @@ define AESD_ASSIGNMENTS_INSTALL_TARGET_CMDS
 	$(INSTALL) -m 0755 $(@D)/finder-app/finder-test.sh $(TARGET_DIR)/usr/bin
 	$(INSTALL) -m 0775 $(@D)/server/aesdsocket $(TARGET_DIR)/usr/bin
 	$(INSTALL) -m 0775 $(@D)/server/aesdsocket-start-stop $(TARGET_DIR)/etc/init.d/S99aesdsocket
+	@echo  "Fix the path of the daemon in the init script"
+	@echo  "This is necessary because the init script expects the daemon to be in /usr/bin"
+	sed -i 's/DAEMON=aesdsocket/DAEMON=\/usr\/bin\/aesdsocket/' $(TARGET_DIR)/etc/init.d/S99aesdsocket
+	$(INSTALL) -m 0755 $(@D)/aesd-char-driver/aesdchar_load $(TARGET_DIR)/usr/bin
+	$(INSTALL) -m 0755 $(@D)/aesd-char-driver/aesdchar_unload $(TARGET_DIR)/usr/bin
 endef
 
+$(eval $(kernel-module))
 $(eval $(generic-package))
